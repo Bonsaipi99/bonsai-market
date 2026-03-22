@@ -3,55 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bonsai Pi99 Premium</title>
+    <title>Chợ Bonsai Pi99 - Sàn Giao Dịch Cộng Đồng</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e8f5e9; margin: 0; padding: 0; }
-        .header { background: #2e7d32; color: white; padding: 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .container { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-10px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .card-info { padding: 20px; text-align: center; }
-        .card-info h3 { margin: 10px 0; color: #1b5e20; }
-        .price { color: #f57c00; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; }
-        .btn-buy { background: linear-gradient(135deg, #ffa000, #ff6f00); color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; box-shadow: 0 5px 15px rgba(255, 111, 0, 0.3); }
-        .btn-buy:active { transform: scale(0.95); }
+        :root { --primary: #2e7d32; --gold: #ffa000; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
+        
+        /* Header & Banner */
+        .header { background: var(--primary); color: white; padding: 15px; text-align: center; sticky; top: 0; z-index: 100; }
+        .fee-info { background: #fff3e0; padding: 10px; font-size: 0.9rem; color: #e65100; font-weight: bold; border-bottom: 2px dashed var(--gold); }
+
+        /* Form đăng bài (Ẩn lúc đầu) */
+        #postForm { display: none; background: white; margin: 15px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+
+        /* Danh sách cây rao bán */
+        .feed { padding: 15px; }
+        .post { background: white; border-radius: 15px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .post img { width: 100%; height: 250px; object-fit: cover; }
+        .post-content { padding: 15px; }
+        .post-user { display: flex; align-items: center; margin-bottom: 10px; font-weight: bold; color: #555; }
+        .post-user i { margin-right: 8px; color: var(--primary); }
+        .price-tag { color: var(--gold); font-size: 1.3rem; font-weight: bold; }
+
+        /* Nút đăng bài nổi */
+        .btn-post-main { position: fixed; bottom: 20px; right: 20px; background: var(--gold); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; z-index: 999; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <h1>🌿 BONSAI PI99 MARKET</h1>
-        <p>Thế giới cây cảnh - Thanh toán bằng Pi</p>
+        <h1>🌿 CHỢ BONSAI PI99</h1>
+        <span>Sàn rao bán cây cảnh lớn nhất hệ Pi</span>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1512428813834-c702c7702b78?auto=format&fit=crop&w=500" alt="Bonsai 1">
-            <div class="card-info">
-                <h3>Tùng La Hán Dáng Văn Nhân</h3>
-                <div class="price">1.5 Pi</div>
-                <button class="btn-buy" onclick="alert('Đang kết nối ví Pi...')">MUA NGAY</button>
-            </div>
-        </div>
+    <div class="fee-info">
+        <marquee>⚠️ PHÍ ĐĂNG BÀI: 0.1 Pi/bài (Duyệt nhanh trong 5 phút) - Phí giao dịch thành công: 2%</marquee>
+    </div>
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1599591037488-dc7169438901?auto=format&fit=crop&w=500" alt="Bonsai 2">
-            <div class="card-info">
-                <h3>Mai Chiếu Thủy Cổ Thụ</h3>
-                <div class="price">3.2 Pi</div>
-                <button class="btn-buy" onclick="alert('Đang kết nối ví Pi...')">MUA NGAY</button>
-            </div>
-        </div>
+    <button class="btn-post-main" onclick="toggleForm()"><i class="fas fa-plus"></i></button>
 
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=500" alt="Bonsai 3">
-            <div class="card-info">
-                <h3>Linh Sam Thác Đổ</h3>
-                <div class="price">2.8 Pi</div>
-                <button class="btn-buy" onclick="alert('Đang kết nối ví Pi...')">MUA NGAY</button>
+    <div id="postForm">
+        <h3><i class="fas fa-edit"></i> Đăng bán cây của mầy</h3>
+        <input type="text" id="treeName" placeholder="Tên cây (Ví dụ: Sanh Nam Điền...)">
+        <textarea id="desc" placeholder="Mô tả chi tiết tình trạng cây..."></textarea>
+        <input type="number" id="price" placeholder="Giá bán (Pi)">
+        <p style="font-size: 0.8rem; color: gray;">Chọn ảnh/video (Bản demo: Chỉ hiển thị hình mẫu)</p>
+        <input type="file" accept="image/*,video/*">
+        <button class="btn-submit" onclick="payFee()">THANH TOÁN PHÍ & ĐĂNG BÀI (0.1 Pi)</button>
+        <button onclick="toggleForm()" style="background:none; border:none; color:red; width:100%; margin-top:10px;">Đóng</button>
+    </div>
+
+    <div class="feed">
+        <div class="post">
+            <div class="post-content">
+                <div class="post-user"><i class="fas fa-user-circle"></i> Anh Ba Vườn Kiểng</div>
+                <img src="https://images.unsplash.com/photo-1599591037488-dc7169438901?auto=format&fit=crop&w=500" alt="Bonsai">
+                <h3>Mai Chiếu Thủy Dáng Trực</h3>
+                <p>Cây thuần chậu 5 năm, chi dăm dày đặc. Cần tiền cưới vợ cho con nên gả gấp.</p>
+                <div class="price-tag">5.0 Pi</div>
+                <button class="btn-submit" style="background:#ffa000" onclick="alert('Đang liên hệ chủ vườn...')">LIÊN HỆ MUA</button>
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleForm() {
+            var f = document.getElementById('postForm');
+            f.style.display = (f.style.display == 'none' || f.style.display == '') ? 'block' : 'none';
+        }
+
+        function payFee() {
+            alert('Hệ thống sẽ kết nối ví Pi của mầy để thu phí 0.1 Pi đăng bài. Đồng ý không?');
+            // Chỗ này sau này sẽ dán code Pi Payment thật vào nè
+        }
+    </script>
 </body>
 </html>
