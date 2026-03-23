@@ -39,18 +39,47 @@
         <button class="btn-go" onclick="startApp()">VÀO SẢNH CHÍNH</button>
     </div>
 
-    <script>
-        Pi.init({ version: "2.0", sandbox: true });
-        function toggleSheet(show) {
-            document.getElementById('overlay').style.display = show ? 'block' : 'none';
-            document.getElementById('loginSheet').classList.toggle('active', show);
-        }
-        function startApp() {
-            const val = document.getElementById('piName').value;
-            if(!val) return alert("Mầy chưa nhập tên!");
-            localStorage.setItem('user99', val);
-            window.location.href = 'lobby.html';
-        }
+    <script type="module">
+    // 1. Nhúng thư viện Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // 2. Cấu hình Firebase (Lấy từ ảnh mầy gửi)
+    const firebaseConfig = {
+        apiKey: "AIzaSy...", // Đoạn này mầy tự điền key thật của mầy vào
+        databaseURL: "https://bonsaipi99-default-rtdb.firebaseio.com",
+        projectId: "bonsaipi99",
+    };
+
+    // Khởi tạo
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 3. Giữ lại các hàm cũ của mầy nhưng đưa vào window để nút bấm vẫn nhận
+    window.toggleSheet = function(show) {
+        document.getElementById('overlay').style.display = show ? 'block' : 'none';
+        document.getElementById('loginSheet').classList.toggle('active', show);
+    }
+
+    window.startApp = async function() {
+        const val = document.getElementById('piName').value;
+        if(!val) return alert("Mầy chưa nhập tên!");
+        
+        // Lưu vào Firebase để làm "kho chứa" thật
+        await set(ref(db, 'users/' + val), {
+            username: val,
+            lastLogin: new Date().toISOString(),
+            balance: 100 // Tặng 100 Pi ảo lúc mới tạo chẳng hạn
+        });
+
+        localStorage.setItem('user99', val);
+        window.location.href = 'lobby.html';
+    }
+
+    // Khởi tạo Pi SDK
+    Pi.init({ version: "2.0", sandbox: true });
+</script>
+
     </script>
 </body>
 </html>
