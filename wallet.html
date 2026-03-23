@@ -65,7 +65,7 @@
                 window.location.href = 'lobby.html';
             } catch(e) { alert("Lỗi mạng mầy ơi!"); }
         }
-    <script type="module">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -81,6 +81,7 @@
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
 
+  // 1. Lệnh hiện số Pi (Nhớ sửa dòng hiển thị thành id="pi-balance")
   onValue(ref(database, 'balance'), (snapshot) => {
     const data = snapshot.val();
     const display = document.getElementById('pi-balance');
@@ -88,4 +89,18 @@
       display.innerText = (data ? data : "0") + ".00 Pi";
     }
   });
+
+  // 2. Lệnh làm cho cái nút bấm nó hoạt động lại
+  window.sendRequest = function() {
+    const amount = document.querySelector('input[placeholder="Số lượng Pi"]').value;
+    const txid = document.querySelector('input[placeholder="Dán mã TXID vào đây"]').value;
+    
+    if(!amount || !txid) {
+      alert("Mầy phải nhập đủ số tiền và mã giao dịch mới nạp được!");
+      return;
+    }
+    
+    alert("Đã gửi yêu cầu nạp " + amount + " Pi! Chờ bà chủ Nhi duyệt nhé.");
+    // Chỗ này sau này tao chỉ mầy cách gửi thông báo về Telegram sau
+  }
 </script>
