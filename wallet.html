@@ -3,38 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nạp Pi - BONSAIPI99</title>
+    <title>Wallet - BONSAIPI99</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; }
         .pi-box { background: rgba(255,188,0,0.1); border: 1px solid #ffbc00; padding: 15px; border-radius: 12px; text-align: center; color: #ffbc00; font-weight: bold; font-size: 20px; }
-        .input-field { background: #111; border: 1px solid #222; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 15px; color: #fff; }
+        .input-field { background: #111; border: 1px solid #222; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 15px; color: #fff; outline: none; }
         .btn-pay { background: #6d28d9; color: #fff; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body class="p-4">
-
-    <div class="mb-6">
-        <a href="lobby.html" class="text-gray-400 text-sm">← Quay lại</a>
-    </div>
-
+    <div class="mb-6"><a href="lobby.html" class="text-gray-400 text-sm">← Back</a></div>
     <div class="text-center mb-6">
-        <p class="text-gray-400 text-xs uppercase">Số dư hiện tại</p>
+        <p class="text-gray-400 text-[10px] uppercase">Current Balance</p>
         <div id="pi-balance" class="pi-box">0.00 Pi</div>
     </div>
-
     <div class="bg-[#0a0a0a] p-4 rounded-xl border border-[#1a1a1a]">
-        <h2 class="text-[#ffbc00] font-bold mb-4 uppercase text-sm">Giao dịch</h2>
-        
-        <p class="text-gray-500 text-xs mb-1">Ví Admin nhận Pi:</p>
-        <div class="bg-[#111] p-2 rounded text-[10px] text-gray-400 mb-4 break-all">
-            GDUY7G2N...Q7P2K
-        </div>
-
-        <input type="number" id="amount" class="input-field" placeholder="Số lượng Pi">
-        <input type="text" id="txid" class="input-field" placeholder="Dán mã TXID vào đây">
-        
-        <button onclick="sendRequest()" class="btn-pay">GỬI YÊU CẦU</button>
+        <h2 class="text-[#ffbc00] font-bold mb-4 uppercase text-sm">Deposit</h2>
+        <input type="number" id="amount" class="input-field" placeholder="Amount Pi">
+        <input type="text" id="txid" class="input-field" placeholder="TXID">
+        <button id="btn-send" class="btn-pay">SEND REQUEST</button>
     </div>
 
     <script type="module">
@@ -53,27 +41,43 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Đọc số dư từ Firebase
+        // Read balance
         onValue(ref(database, 'balance'), (s) => {
             const d = s.val();
             const e = document.getElementById('pi-balance');
             if (e) {
-                const val = (d !== null && (typeof d === 'number' || typeof d === 'string')) ? d : 0;
-                e.innerText = val + ".00 Pi";
+                const v = (d !== null && (typeof d === 'number' || typeof d === 'string')) ? d : 0;
+                e.innerText = v + ".00 Pi";
             }
         });
 
-        // Xử lý nút bấm
-        window.sendRequest = function() {
+        // Send Telegram
+        document.getElementById('btn-send').onclick = async function() {
             const a = document.getElementById('amount').value;
             const t = document.getElementById('txid').value;
+            const token = "7547194689:AAH-6mJ-971EwS0pYVf8m9qR7t_Xv6U9u9I";
+            const chatid = "6198947087";
+
             if (!a || !t) {
-                alert("Nhi ơi, nhập đủ số Pi và TXID nha!");
+                alert("Please fill all fields!");
                 return;
             }
-            alert("Gửi thành công! Đang chờ duyệt: " + a + " Pi");
-            document.getElementById('amount').value = "";
-            document.getElementById('txid').value = "";
+
+            const text = `🔔 NEW DEPOSIT\nAmount: ${a} Pi\nTXID: ${t}`;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(text)}`;
+
+            try {
+                const res = await fetch(url);
+                if(res.ok) {
+                    alert("Success! Please wait for approval.");
+                    document.getElementById('amount').value = "";
+                    document.getElementById('txid').value = "";
+                } else {
+                    alert("Telegram Error! Did you press START on Bot?");
+                }
+            } catch (e) {
+                alert("Network Error!");
+            }
         };
     </script>
 </body>
