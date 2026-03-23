@@ -3,67 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lobby - BONSAIPI99</title>
+    <title>Lobby</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #000; color: #fff; font-family: sans-serif; }
         .pi-box { background: rgba(255,188,0,0.1); border: 1px solid #ffbc00; padding: 5px 12px; border-radius: 20px; color: #ffbc00; font-weight: bold; font-size: 14px; }
-        .menu-icon { width: 50px; height: 50px; background: #1a1a1a; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; }
-        .card { background: #111; border-radius: 18px; overflow: hidden; border: 1px solid #222; }
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #222; }
+        .card { background: #111; border-radius: 18px; border: 1px solid #222; padding: 15px; }
     </style>
 </head>
-<body class="pb-20">
-
-    <header class="p-4 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div id="avt" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold">U</div>
-            <div>
-                <p id="un" class="font-bold text-sm">User</p>
-                <p class="text-[10px] text-gray-500">ID: BONSAIPI99</p>
-            </div>
-        </div>
+<body>
+    <header class="p-4 flex justify-between items-center border-b border-[#1a1a1a]">
+        <div class="font-bold text-purple-500">BONSAIPI99</div>
         <div id="pi-balance" class="pi-box">0.00 Pi</div>
     </header>
 
     <div class="p-4">
-        <div class="bg-gradient-to-r from-purple-900 to-black p-6 rounded-2xl mb-6">
-            <h2 class="font-bold text-lg">BONSAIPI99 VIP</h2>
-            <p class="text-xs text-gray-400">He thong giai tri & Mua ban cay kieng Pi.</p>
+        <div class="card mb-6 text-center">
+            <h2 class="text-xl font-bold mb-2">WELCOME</h2>
+            <p class="text-gray-500 text-xs">Manage your Pi balance easily.</p>
         </div>
 
-        <div class="grid grid-cols-4 gap-4 mb-8 text-center text-[10px]">
-            <a href="#"><div class="menu-icon">👤</div>Profile</a>
-            <a href="wallet.html"><div class="menu-icon">💰</div>Deposit</a>
-            <a href="#"><div class="menu-icon">💸</div>Withdraw</a>
-            <a href="#"><div class="menu-icon">📋</div>History</a>
-        </div>
-
-        <p class="text-gray-500 text-xs uppercase mb-4">Featured Games</p>
         <div class="grid grid-cols-2 gap-4">
-            <div class="card">
-                <div class="h-24 bg-gray-800"></div>
-                <div class="p-3 text-[10px]">
-                    <p class="font-bold">Vong Quay Bonsai</p>
-                    <p class="text-gray-500">1 Pi / Spin</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="h-24 bg-gray-800"></div>
-                <div class="p-3 text-[10px]">
-                    <p class="font-bold">No Hu Cay Xanh</p>
-                    <p class="text-yellow-500 text-[8px]">Jackpot: 500 Pi</p>
-                </div>
+            <a href="wallet.html" class="card text-center">
+                <div class="text-2xl mb-2">💰</div>
+                <div class="text-xs font-bold uppercase">Deposit</div>
+            </a>
+            <div class="card text-center opacity-50">
+                <div class="text-2xl mb-2">💸</div>
+                <div class="text-xs font-bold uppercase">Withdraw</div>
             </div>
         </div>
     </div>
-
-    <nav class="nav-bar">
-        <a href="lobby.html" class="text-purple-500 text-[10px] text-center">🏠<br>Lobby</a>
-        <a href="wallet.html" class="text-gray-500 text-[10px] text-center">💳<br>Wallet</a>
-        <a href="#" class="text-gray-500 text-[10px] text-center">🎁<br>Event</a>
-        <a href="index.html" class="text-gray-500 text-[10px] text-center">🚪<br>Exit</a>
-    </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -89,22 +59,9 @@
                 e.innerText = v + ".00 Pi";
             }
         });
-
-        const u = localStorage.getItem('userPi') || "Guest";
-        document.getElementById('un').innerText = u;
-        document.getElementById('avt').innerText = u.charAt(0).toUpperCase();
     </script>
 </body>
 </html>
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-
-  // Đọc số tiền từ ô 'balance' trên Firebase
-  const piRef = ref(database, 'balance'); 
-  onValue(piRef, (snapshot) => {
-    const data = snapshot.val();
     const displayElement = document.getElementById('pi-balance');
     if (displayElement) {
       displayElement.innerText = (data ? data : "0") + ".00 Pi";
