@@ -3,64 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LUCK 8 - PI NETWORK</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+    <title>Sảnh BONSAI PI</title>
     <style>
-        :root { --picolor: #5e2d91; --bg: #0d0d0d; --text: #ffffff; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        .container { text-align: center; width: 100%; padding: 20px; z-index: 2; }
-        .logo-pi { width: 110px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--picolor)); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        h1 { font-size: 28px; margin: 0; letter-spacing: 3px; font-weight: 800; }
-        .sub { color: #888; margin: 10px 0 30px; font-size: 14px; }
-        .btn-main { background: linear-gradient(135deg, #5e2d91 0%, #3a1c59 100%); color: white; border: none; padding: 18px 45px; border-radius: 50px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.4); transition: 0.3s; }
+        :root { --picolor: #5e2d91; --gold: #ffbc00; --dark-bg: #0a0a0a; --card-bg: #161616; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark-bg); color: white; margin: 0; padding-bottom: 90px; }
         
-        /* Hiệu ứng Bottom Sheet */
-        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; z-index: 10; }
-        .sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: #ffffff; border-radius: 30px 30px 0 0; transition: 0.5s cubic-bezier(0, 1, 0.5, 1); z-index: 11; padding: 35px 25px; box-sizing: border-box; color: #222; }
-        .sheet.active { bottom: 0; }
-        .handle { width: 45px; height: 5px; background: #ddd; border-radius: 10px; margin: -15px auto 25px; }
-        input { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #eee; background: #f9f9f9; font-size: 16px; box-sizing: border-box; }
-        .btn-go { width: 100%; padding: 16px; background: #4c84ff; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        /* Thanh đầu trang */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #1a1a1a; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
+        .user-box { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; background: var(--picolor); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; border: 2px solid #333; }
+        .balance-box { background: rgba(255, 188, 0, 0.1); border: 1px solid var(--gold); padding: 5px 12px; border-radius: 20px; color: var(--gold); font-weight: bold; font-size: 14px; }
+
+        /* Banner quảng cáo */
+        .promo-banner { margin: 15px; padding: 20px; background: linear-gradient(135deg, #5e2d91, #3a1c59); border-radius: 20px; text-align: left; position: relative; overflow: hidden; }
+        .promo-banner h2 { margin: 0; font-size: 20px; color: var(--gold); }
+        .promo-banner p { margin: 5px 0 0; font-size: 12px; opacity: 0.8; }
+
+        /* Khu vực chức năng Nạp/Rút/Hồ sơ */
+        .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px 20px; margin-bottom: 20px; }
+        .action-item { text-align: center; color: #ccc; text-decoration: none; font-size: 12px; }
+        .action-icon { width: 50px; height: 50px; background: var(--card-bg); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 20px; border: 1px solid #333; }
+
+        /* Lưới Game & Bonsai */
+        .section-title { padding: 0 20px; font-size: 16px; font-weight: bold; color: #888; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+        .item-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; }
+        .item-card img { width: 100%; height: 120px; object-fit: cover; }
+        .item-info { padding: 12px; text-align: center; }
+        .item-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .item-price { color: var(--gold); font-size: 12px; font-weight: bold; }
+
+        /* Menu điều hướng dưới cùng */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px); display: flex; padding: 12px 0; border-top: 1px solid #333; z-index: 100; }
+        .nav-tab { flex: 1; text-align: center; color: #666; text-decoration: none; font-size: 11px; }
+        .nav-tab.active { color: var(--picolor); font-weight: bold; }
+        .nav-tab i { font-size: 22px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="https://minepi.com/wp-content/uploads/2023/11/pi-logo-600.png" class="logo-pi">
-        <h1>LUCK 8 - PI</h1>
-        <p class="sub">Hệ thống Bonsai & Game đẳng cấp Pi Network</p>
-        <button class="btn-main" onclick="openLogin()">BẮT ĐẦU NGAY</button>
+
+    <div class="header">
+        <div class="user-box">
+            <div class="avatar" id="avt">?</div>
+            <div>
+                <div id="username" style="font-weight: bold; font-size: 14px;">User</div>
+                <div style="font-size: 10px; color: #888;">Thành viên VIP</div>
+            </div>
+        </div>
+        <div class="balance-box">100.00 Pi</div>
     </div>
 
-    <div id="overlay" onclick="closeLogin()"></div>
-    <div class="sheet" id="loginSheet">
-        <div class="handle"></div>
-        <h2 style="margin: 0 0 20px; text-align: center;">Đăng nhập</h2>
-        <input type="text" id="user" placeholder="Tên tài khoản Pi">
-        <input type="password" id="pass" placeholder="Mật khẩu">
-        <button class="btn-go" onclick="handleLogin()">XÁC NHẬN VÀO SẢNH</button>
+    <div class="promo-banner">
+        <h2>BONSAI PI - TẾT 2026</h2>
+        <p>Mua cây tặng quà, nạp Pi x2 điểm thưởng!</p>
+    </div>
+
+    <div class="quick-actions">
+        <a href="wallet.html" class="action-item">
+            <div class="action-icon" style="color: #4CAF50;">📥</div>Nạp Pi
+        </a>
+        <a href="wallet.html" class="action-item">
+            <div class="action-icon" style="color: #f44336;">📤</div>Rút Pi
+        </a>
+        <a href="#" onclick="alert('Đang cập nhật hồ sơ mầy ơi!')" class="action-item">
+            <div class="action-icon" style="color: #2196F3;">👤</div>Hồ Sơ
+        </a>
+        <a href="#" onclick="alert('Lịch sử trống trơn!')" class="action-item">
+            <div class="action-icon" style="color: var(--gold);">📋</div>Lịch Sử
+        </a>
+    </div>
+
+    <div class="section-title">
+        <span>TRÒ CHƠI GIẢI TRÍ</span>
+        <span style="color: var(--picolor); font-size: 12px;">Xem tất cả</span>
+    </div>
+    <div class="grid">
+        <div class="item-card" onclick="alert('Vòng quay đang lắp pin!')">
+            <img src="https://via.placeholder.com/200/5e2d91/fff?text=LUCKY+SPIN">
+            <div class="item-info">
+                <div class="item-name">Vòng Quay May Mắn</div>
+                <div class="item-price">1 Pi / lượt</div>
+            </div>
+        </div>
+        <div class="item-card" onclick="alert('Nổ hũ sắp khai trương!')">
+            <img src="https://via.placeholder.com/200/222/fff?text=SLOT+GAME">
+            <div class="item-info">
+                <div class="item-name">Nổ Hũ Bonsai</div>
+                <div class="item-price">Jackpot: 1000 Pi</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 25px;">
+        <span>CHỢ CÂY KIỂNG</span>
+    </div>
+    <div class="grid">
+        <div class="item-card">
+            <img src="https://via.placeholder.com/200/004400/fff?text=TUNG+LA+HAN">
+            <div class="item-info">
+                <div class="item-name">Tùng La Hán</div>
+                <div class="item-price">50.00 Pi</div>
+            </div>
+        </div>
+        <div class="item-card">
+            <img src="https://via.placeholder.com/200/555500/fff?text=MAI+VANG">
+            <div class="item-info">
+                <div class="item-name">Mai Vàng VIP</div>
+                <div class="item-price">120.00 Pi</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="lobby.html" class="nav-tab active"><i>🏠</i>Sảnh</a>
+        <a href="wallet.html" class="nav-tab"><i>💰</i>Ví Pi</a>
+        <a href="#" class="nav-tab"><i>🎁</i>Nhiệm Vụ</a>
+        <a href="index.html" class="nav-tab"><i>🚪</i>Thoát</a>
     </div>
 
     <script>
-        // Khởi tạo Pi SDK (Cái móng nhà đây mầy!)
-        const Pi = window.Pi;
-        Pi.init({ version: "2.0", sandbox: true });
-
-        function openLogin() { 
-            document.getElementById('overlay').style.display='block'; 
-            document.getElementById('loginSheet').classList.add('active'); 
-        }
-        function closeLogin() { 
-            document.getElementById('overlay').style.display='none'; 
-            document.getElementById('loginSheet').classList.remove('active'); 
-        }
-        function handleLogin() {
-            const u = document.getElementById('user').value;
-            if(!u) return alert("Nhập tên mới vào được mậy!");
-            // Lưu tên vào máy để các trang sau dùng
-            localStorage.setItem('piUser', u);
-            window.location.href='lobby.html';
-        }
+        // Lấy tên từ trang đăng nhập để hiển thị
+        const user = localStorage.getItem('bonsaiUser') || 'Khách';
+        document.getElementById('username').innerText = user;
+        document.getElementById('avt').innerText = user.charAt(0).toUpperCase();
     </script>
 </body>
 </html>
