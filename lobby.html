@@ -110,20 +110,13 @@
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
 
-  // Lệnh để nó "hứng" số 10 từ Firebase về web
+  // Đọc số tiền từ ô 'balance' trên Firebase
   const piRef = ref(database, 'balance'); 
   onValue(piRef, (snapshot) => {
     const data = snapshot.val();
-    const displayElement = document.querySelector('.pi-box'); 
+    const displayElement = document.getElementById('pi-balance');
     if (displayElement) {
       displayElement.innerText = (data ? data : "0") + ".00 Pi";
     }
   });
-
-  // Giữ lại phần hiện tên khách
-  const u = localStorage.getItem('userPi') || "Khách";
-  const unElement = document.getElementById('un');
-  const avtElement = document.getElementById('avt');
-  if(unElement) unElement.innerText = u;
-  if(avtElement) avtElement.innerText = u.charAt(0).toUpperCase();
 </script>
