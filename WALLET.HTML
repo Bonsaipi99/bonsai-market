@@ -3,42 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ví Bonsai Pi</title>
+    <title>Ví BONSAIPI99</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background: #121212; color: white; padding: 20px; }
-        .box { background: #1e1e1e; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #444; background: #121212; color: white; box-sizing: border-box; }
-        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-dep { background: #ffbc00; color: black; }
-        .back { color: #888; text-decoration: none; display: block; margin-bottom: 20px; }
+        body { font-family: sans-serif; background: #0a0a0a; color: white; padding: 20px; }
+        .card { background: linear-gradient(135deg, #111, #222); padding: 30px; border-radius: 25px; text-align: center; border: 1px solid #333; margin-bottom: 25px; }
+        .pi { font-size: 35px; font-weight: 900; color: #ffbc00; margin: 10px 0; }
+        .form { background: #151515; padding: 25px; border-radius: 20px; border: 1px solid #222; }
+        .addr { background: #000; padding: 12px; border-radius: 10px; color: #ffbc00; font-family: monospace; font-size: 11px; margin: 15px 0; border: 1px dashed #444; word-break: break-all; }
+        input { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #333; background: #050505; color: white; box-sizing: border-box; margin-bottom: 15px; outline: none; }
+        .btn { width: 100%; padding: 18px; background: #5e2d91; color: white; border: none; border-radius: 15px; font-weight: bold; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <a href="lobby.html" class="back">← Quay lại sảnh</a>
-    <h2>NẠP PI VÀO TÀI KHOẢN</h2>
-    <div class="box">
-        <p style="font-size: 13px; color: #ffbc00;">Ví Admin: <b>GDUY...7F2K</b> (Mầy thay ví thật vào)</p>
-        <input type="number" id="amount" placeholder="Số Pi đã chuyển">
-        <input type="text" id="txid" placeholder="Dán mã TXID vào đây">
-        <button class="btn btn-dep" onclick="sendNoti()">XÁC NHẬN ĐÃ CHUYỂN</button>
-        <p style="font-size: 11px; color: #888; margin-top: 10px;">* Chờ 30 phút để Admin duyệt thủ công.</p>
+    <a href="lobby.html" style="color:#666; text-decoration:none; display:block; margin-bottom:20px;">← Quay lại Sảnh</a>
+    
+    <div class="card">
+        <p style="margin:0; opacity:0.6;">Số dư BONSAIPI99</p>
+        <div class="pi">100.00 Pi</div>
+    </div>
+
+    <div class="form">
+        <h3 style="margin-top:0;">LỆNH NẠP PI</h3>
+        <p style="font-size:12px; color:#888;">Ví Admin BONSAIPI99:</p>
+        <div class="addr">GDUY7O2N...Q7F2K</div>
+        
+        <input type="number" id="a" placeholder="Số Pi đã chuyển">
+        <input type="text" id="t" placeholder="Mã TXID giao dịch">
+        <button class="btn" onclick="send()">XÁC NHẬN NẠP</button>
     </div>
 
     <script>
-        const TOKEN = '8352771211:AAG8A09yhuJqcy5wEXCiMUMkBNsEUOM5v5g'; // Token của mầy
-        const CHAT_ID = '7359710522'; // ID của mầy
+        const TK = '8352771211:AAG8A09yhuJqcy5wEXCiMUMkBNsEUOM5v5g';
+        const ID = '7359710522';
 
-        async function sendNoti() {
-            const a = document.getElementById('amount').value;
-            const t = document.getElementById('txid').value;
-            if(!a || !t) return alert("Nhập đủ mới duyệt được mậy!");
+        async function send() {
+            const amount = document.getElementById('a').value;
+            const txid = document.getElementById('t').value;
+            const user = localStorage.getItem('user99') || 'Khách';
 
-            const msg = `🔔 NẠP PI MỚI!\n💰 Số lượng: ${a} Pi\n🔑 TXID: ${t}`;
-            const url = `https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`;
-            
-            await fetch(url);
-            alert("Đã báo Admin! Đợi tí nhé.");
-            window.location.href='lobby.html';
+            if(!amount || !txid) return alert("Điền thiếu rồi mầy!");
+
+            const msg = `🌳 **BONSAIPI99 - NẠP PI** 🌳\n👤 Khách: \`${user}\`\n💰 Số lượng: \`${amount}\` Pi\n🔑 TXID: \`${txid}\``;
+            const url = `https://api.telegram.org/bot${TK}/sendMessage?chat_id=${ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
+
+            try {
+                await fetch(url);
+                alert("Đã báo Admin! Chờ duyệt nhé.");
+                window.location.href = 'lobby.html';
+            } catch(e) { alert("Lỗi mạng!"); }
         }
     </script>
 </body>
