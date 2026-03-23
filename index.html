@@ -2,86 +2,111 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, landscape">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bonsai Pi Center</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #1a1a1a; color: white; overflow-x: hidden; }
-        /* Dòng chữ chạy trên đầu */
-        .announcement { background: rgba(94, 45, 145, 0.8); color: #fff; padding: 5px 0; overflow: hidden; white-space: nowrap; position: fixed; top: 0; width: 100%; z-index: 100; }
-        .announcement marquee { font-weight: bold; }
+        :root { --picolor: #5e2d91; --dark: #1a1a1a; --card: #2d2d2d; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--dark); color: white; overflow-x: hidden; }
+        
+        /* TRANG ĐĂNG NHẬP */
+        #login-page { position: fixed; inset: 0; background: var(--dark); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .login-box { background: var(--card); padding: 30px; border-radius: 20px; width: 100%; max-width: 350px; text-align: center; border: 1px solid var(--picolor); }
+        .login-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; }
+        .btn-fb { background: #1877f2; color: white; }
+        .btn-gg { background: white; color: black; }
+        .btn-pi { background: var(--picolor); color: white; }
+        
+        /* GIAO DIỆN CHÍNH */
+        .announcement { background: rgba(94, 45, 145, 0.9); padding: 5px 0; position: fixed; top: 0; width: 100%; z-index: 100; font-size: 13px; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 45px 15px 10px; background: var(--card); }
+        
+        /* MENU 3 GẠCH (ĐÃ SỬA LỖI ĐÓNG) */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 260px; height: 100%; background: #111; transition: 0.3s; z-index: 500; padding-top: 20px; border-right: 1px solid var(--picolor); }
+        .sidebar.active { left: 0; }
+        .sidebar a { display: block; padding: 15px 20px; color: #ccc; text-decoration: none; border-bottom: 1px solid #222; }
+        .sidebar a:hover { background: var(--picolor); color: white; }
+        /* Lớp phủ đen để bấm tắt menu */
+        #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 400; }
+        #overlay.active { display: block; }
 
-        /* Header & Menu */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 50px 20px 10px; background: #2d2d2d; }
-        .menu-btn { font-size: 30px; cursor: pointer; color: #5e2d91; }
-        .user-info { display: flex; align-items: center; background: #3d3d3d; padding: 5px 15px; border-radius: 20px; border: 1px solid #5e2d91; }
-        .pi-balance { color: #ffbc00; font-weight: bold; margin-left: 10px; }
-
-        /* Sảnh Game/Bonsai */
-        .lobby { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; margin-top: 10px; }
-        .item-card { background: #333; border-radius: 15px; overflow: hidden; text-align: center; padding-bottom: 10px; border: 1px solid #444; transition: 0.3s; }
-        .item-card:hover { transform: translateY(-5px); border-color: #5e2d91; }
-        .item-card img { width: 100%; height: 100px; object-fit: cover; }
-
-        /* Nút đăng bài + */
-        .btn-add { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #5e2d91; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; color: white; border: none; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-
-        /* Sidebar Menu */
-        .sidebar { position: fixed; left: -250px; top: 0; width: 250px; height: 100%; background: #222; transition: 0.5s; z-index: 200; padding-top: 60px; }
-        .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #333; }
-        .sidebar a:hover { background: #5e2d91; }
-
-        /* Âm thanh leng keng (giả lập) */
-        @keyframes coinFly {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-50px); opacity: 0; }
-        }
+        /* SẢNH & NÚT + */
+        .lobby { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; margin-top: 10px; }
+        .item-card { background: var(--card); border-radius: 12px; padding-bottom: 10px; text-align: center; font-size: 14px; border: 1px solid #333; }
+        .item-card img { width: 100%; height: 120px; border-radius: 12px 12px 0 0; object-fit: cover; }
+        .btn-add { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--picolor); border-radius: 50%; font-size: 30px; color: white; border: none; z-index: 100; box-shadow: 0 4px 10px black; }
     </style>
 </head>
 <body>
 
-    <div class="announcement">
-        <marquee>Chào mừng mầy đến với Bonsai Pi Market! Chúc mầy mua may bán đắt. Thông báo: Hệ thống sẽ bảo trì vào 12h đêm nay!</marquee>
-    </div>
-
-    <div class="header">
-        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
-        <div class="user-info">
-            <img src="https://via.placeholder.com/30" style="border-radius: 50%;">
-            <span id="username">Mầy Bonsai</span>
-            <span class="pi-balance">💰 <span id="balance">100.00</span> Pi</span>
+    <div id="login-page">
+        <div class="login-box">
+            <h2 style="color: var(--picolor)">BONSAI PI MARKET</h2>
+            <p style="font-size: 13px; color: #888">Vui lòng đăng nhập để tiếp tục</p>
+            <button class="login-btn btn-pi" onclick="doLogin('Pi Network')">Đăng nhập bằng Pi Network</button>
+            <button class="login-btn btn-gg" onclick="doLogin('Google')">Đăng nhập bằng Google</button>
+            <button class="login-btn btn-fb" onclick="doLogin('Facebook')">Đăng nhập bằng Facebook</button>
+            <div style="margin-top: 15px; font-size: 12px">Chưa có tài khoản? <a href="#" style="color: var(--picolor)">Đăng ký ngay</a></div>
         </div>
     </div>
 
+    <div id="main-content" style="display: none;">
+        <div class="announcement"><marquee>🔥 Chào mừng mầy! Chúc mầy mua may bán đắt. Hệ thống bảo trì lúc 00:00 đêm nay.</marquee></div>
+        
+        <div class="header">
+            <div style="font-size: 25px; cursor: pointer;" onclick="toggleSidebar()">☰</div>
+            <div style="background: #333; padding: 5px 15px; border-radius: 20px; font-size: 14px; border: 1px solid var(--picolor);">
+                💰 <span style="color: #ffbc00; font-weight: bold;">100.00 Pi</span>
+            </div>
+        </div>
+
+        <div class="lobby">
+            <div class="item-card"><img src="https://via.placeholder.com/150/000/fff?text=Bonsai+1"><p>Tùng La Hán</p><b style="color: #ffbc00">10 Pi</b></div>
+            <div class="item-card"><img src="https://via.placeholder.com/150/000/fff?text=Bonsai+2"><p>Mai Vàng</p><b style="color: #ffbc00">5 Pi</b></div>
+        </div>
+
+        <button class="btn-add">+</button>
+    </div>
+
+    <div id="overlay" onclick="toggleSidebar()"></div>
     <div id="mySidebar" class="sidebar">
-        <a href="#" onclick="showProfile()">👤 Hồ Sơ Tài Khoản</a>
-        <a href="#" onclick="showDeposit()">📥 Nạp Pi (Gói linh hoạt)</a>
-        <a href="#" onclick="showWithdraw()">📤 Rút Pi (Max 5 lần/ngày)</a>
+        <div style="text-align: center; padding: 20px; border-bottom: 1px solid #333;">
+            <img src="https://via.placeholder.com/60" style="border-radius: 50%; border: 2px solid var(--picolor)">
+            <p id="user-display" style="font-weight: bold; margin-top: 10px;"></p>
+        </div>
+        <a href="#">👤 Hồ Sơ Tài Khoản</a>
+        <a href="#">📥 Nạp Pi (Gói linh hoạt)</a>
+        <a href="#">📤 Rút Pi (Max 5 lần/ngày)</a>
         <a href="#">🎡 Vòng Quay May Mắn</a>
         <a href="#">🎧 Hỗ Trợ CSKH</a>
-        <a href="#" style="color: red;">🚪 Đăng Xuất</a>
+        <a href="#" onclick="doLogout()" style="color: #ff4444; border-top: 1px solid #333;">🚪 Đăng Xuất</a>
     </div>
-
-    <div class="lobby">
-        <div class="item-card"><img src="https://via.placeholder.com/150"> <p>Bonsai Tùng La Hán</p> <span>10 Pi</span></div>
-        <div class="item-card"><img src="https://via.placeholder.com/150"> <p>Mai Vàng Cực Phẩm</p> <span>5 Pi</span></div>
-        <div class="item-card"><img src="https://via.placeholder.com/150"> <p>Sanh Nam Điền</p> <span>50 Pi</span></div>
-    </div>
-
-    <button class="btn-add">+</button>
 
     <script>
-        function toggleSidebar() {
-            var sidebar = document.getElementById("mySidebar");
-            if (sidebar.style.left === "0px") { sidebar.style.left = "-250px"; } 
-            else { sidebar.style.left = "0px"; }
+        // Kiểm tra xem đã từng đăng nhập chưa
+        if(localStorage.getItem('isLoggedIn') === 'true') {
+            showMain();
         }
 
-        // Giả lập âm thanh leng keng khi cộng tiền
-        function addPi(amount) {
-            let balance = document.getElementById('balance');
-            balance.innerText = (parseFloat(balance.innerText) + amount).toFixed(2);
-            // Ở đây mầy thêm file audio keng.mp3 vào nhé
-            alert("Keng! Mầy vừa được cộng " + amount + " Pi");
+        function doLogin(provider) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('provider', provider);
+            showMain();
+        }
+
+        function showMain() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('user-display').innerText = "User " + localStorage.getItem('provider');
+        }
+
+        function doLogout() {
+            localStorage.removeItem('isLoggedIn');
+            location.reload(); // Tải lại trang để về màn hình login
+        }
+
+        function toggleSidebar() {
+            document.getElementById("mySidebar").classList.toggle("active");
+            document.getElementById("overlay").classList.toggle("active");
         }
     </script>
 </body>
