@@ -94,10 +94,36 @@
         <a href="index.html" class="nav-a"><i>🚪</i>Thoát</a>
     </div>
 
-    <script>
-        const u = localStorage.getItem('user99') || 'Khách';
-        document.getElementById('un').innerText = u;
-        document.getElementById('avt').innerText = u.charAt(0).toUpperCase();
-    </script>
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBc4oPPt2AQdn6AW85DRpQSIuMyK1oJDlQ",
+    authDomain: "bonsaipi99.firebaseapp.com",
+    databaseURL: "https://bonsaipi99-default-rtdb.firebaseio.com",
+    projectId: "bonsaipi99",
+    storageBucket: "bonsaipi99.firebasestorage.app",
+    appId: "1:119041490462:web:5635dc57b3eb6b49afb80f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  // Hiển thị tên người dùng
+  const u = localStorage.getItem('userPi') || "Khách";
+  document.getElementById('un').innerText = u;
+  document.getElementById('avt').innerText = u.charAt(0).toUpperCase();
+
+  // Lấy số Pi từ Firebase hiện lên màn hình
+  const piRef = ref(database, 'balance'); 
+  onValue(piRef, (snapshot) => {
+    const data = snapshot.val();
+    const displayElement = document.querySelector('.pi-box');
+    if (displayElement) {
+      displayElement.innerText = (data ? data : "0") + ".00 Pi";
+    }
+  });
+</script>
 </body>
 </html>
