@@ -3,118 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ví Bonsai Pi - Nạp Rút</title>
+    <title>Ví Bonsai Pi</title>
     <style>
-        :root { --picolor: #5e2d91; --gold: #ffbc00; --dark: #121212; --gray: #2a2a2a; }
-        body { font-family: sans-serif; margin: 0; background: var(--dark); color: white; padding-bottom: 50px; }
-        .header { padding: 20px; background: #1a1a1a; text-align: center; border-bottom: 1px solid #333; position: relative; }
-        .back-btn { position: absolute; left: 20px; top: 25px; text-decoration: none; color: white; font-size: 20px; }
-        
-        /* Thẻ số dư */
-        .balance-card { margin: 20px; padding: 25px; background: linear-gradient(135deg, var(--picolor), #3a1c5a); border-radius: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .balance-amount { font-size: 32px; font-weight: bold; color: var(--gold); margin: 10px 0; }
-
-        /* Tab Nạp/Rút */
-        .tab-box { display: flex; margin: 0 20px; background: var(--gray); border-radius: 10px; padding: 5px; }
-        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 8px; font-weight: bold; }
-        .tab.active { background: var(--picolor); color: white; }
-
-        .content { padding: 20px; }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #bbb; font-size: 14px; }
-        input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #1e1e1e; color: white; box-sizing: border-box; outline: none; }
-        
-        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .btn-deposit { background: var(--gold); color: black; }
-        .btn-withdraw { background: var(--picolor); color: white; }
-
-        /* Thông báo chờ */
-        .status-box { background: rgba(255, 188, 0, 0.1); border: 1px solid var(--gold); padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 13px; line-height: 1.5; }
-        .history-item { background: var(--gray); padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .status-pending { color: var(--gold); }
+        body { font-family: sans-serif; margin: 0; background: #121212; color: white; padding: 20px; }
+        .box { background: #1e1e1e; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #444; background: #121212; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .btn-dep { background: #ffbc00; color: black; }
+        .back { color: #888; text-decoration: none; display: block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <a href="lobby.html" class="back-btn">←</a>
-        <b style="font-size: 18px;">VÍ TRỰC TUYẾN</b>
-    </div>
-
-    <div class="balance-card">
-        <div>Số dư hiện tại</div>
-        <div class="balance-amount">100.00 Pi</div>
-        <div style="font-size: 12px; opacity: 0.8;">Tương đương: 100,000 Point</div>
-    </div>
-
-    <div class="tab-box">
-        <div class="tab active" id="tabDep" onclick="showTab('deposit')">Nạp Pi</div>
-        <div class="tab" id="tabWit" onclick="showTab('withdraw')">Rút Pi</div>
-    </div>
-
-    <div class="content">
-        <div id="depositForm">
-            <div class="input-group">
-                <label>Địa chỉ ví nhận của Admin (Copy bên dưới):</label>
-                <input type="text" value="GDUY...7F2K" readonly style="color: var(--gold); font-weight: bold;">
-            </div>
-            <div class="input-group">
-                <label>Số Pi mầy đã chuyển:</label>
-                <input type="number" id="depAmount" placeholder="Ví dụ: 10">
-            </div>
-            <div class="input-group">
-                <label>Mã giao dịch (TXID):</label>
-                <input type="text" id="txid" placeholder="Dán mã giao dịch từ ví Pi">
-            </div>
-            <button class="btn-action btn-deposit" onclick="submitAction('nạp')">XÁC NHẬN ĐÃ CHUYỂN</button>
-            
-            <div class="status-box">
-                ⚠️ <b>Lưu ý:</b> Hệ thống sẽ kiểm tra giao dịch trên Pi Blockexplorer. Vui lòng chờ <b>30 phút</b> để lệnh được duyệt thủ công.
-            </div>
-        </div>
-
-        <div id="withdrawForm" style="display: none;">
-            <div class="input-group">
-                <label>Số Pi muốn rút (Min: 5 Pi):</label>
-                <input type="number" placeholder="Nhập số Pi">
-            </div>
-            <div class="input-group">
-                <label>Địa chỉ ví Pi nhận tiền:</label>
-                <input type="text" placeholder="Nhập địa chỉ ví G...">
-            </div>
-            <p style="font-size: 12px; color: #888;">* Giới hạn rút: Tối đa 5 lần/ngày</p>
-            <button class="btn-action btn-withdraw" onclick="submitAction('rút')">GỬI LỆNH RÚT</button>
-        </div>
-
-        <h3 style="margin-top: 30px;">Lịch sử gần đây</h3>
-        <div class="history-item">
-            <div>
-                <b>Nạp Pi</b><br><small>23/03/2026 - 10:20</small>
-            </div>
-            <div class="status-pending">+10.00 Pi (Đang chờ)</div>
-        </div>
+    <a href="lobby.html" class="back">← Quay lại sảnh</a>
+    <h2>NẠP PI VÀO TÀI KHOẢN</h2>
+    <div class="box">
+        <p style="font-size: 13px; color: #ffbc00;">Ví Admin: <b>GDUY...7F2K</b> (Mầy thay ví thật vào)</p>
+        <input type="number" id="amount" placeholder="Số Pi đã chuyển">
+        <input type="text" id="txid" placeholder="Dán mã TXID vào đây">
+        <button class="btn btn-dep" onclick="sendNoti()">XÁC NHẬN ĐÃ CHUYỂN</button>
+        <p style="font-size: 11px; color: #888; margin-top: 10px;">* Chờ 30 phút để Admin duyệt thủ công.</p>
     </div>
 
     <script>
-        function showTab(type) {
-            if(type === 'deposit') {
-                document.getElementById('depositForm').style.display = 'block';
-                document.getElementById('withdrawForm').style.display = 'none';
-                document.getElementById('tabDep').classList.add('active');
-                document.getElementById('tabWit').classList.remove('active');
-            } else {
-                document.getElementById('depositForm').style.display = 'none';
-                document.getElementById('withdrawForm').style.display = 'block';
-                document.getElementById('tabDep').classList.remove('active');
-                document.getElementById('tabWit').classList.add('active');
-            }
-        }
+        const TOKEN = '8352771211:AAG8A09yhuJqcy5wEXCiMUMkBNsEUOM5v5g'; // Token của mầy
+        const CHAT_ID = '7359710522'; // ID của mầy
 
-        function submitAction(msg) {
-            alert("Lệnh " + msg + " của mầy đã được gửi! Đợi Admin check tầm 30 phút nhé.");
-            location.reload();
+        async function sendNoti() {
+            const a = document.getElementById('amount').value;
+            const t = document.getElementById('txid').value;
+            if(!a || !t) return alert("Nhập đủ mới duyệt được mậy!");
+
+            const msg = `🔔 NẠP PI MỚI!\n💰 Số lượng: ${a} Pi\n🔑 TXID: ${t}`;
+            const url = `https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`;
+            
+            await fetch(url);
+            alert("Đã báo Admin! Đợi tí nhé.");
+            window.location.href='lobby.html';
         }
     </script>
 </body>
 </html>
-
