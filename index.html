@@ -3,128 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bonsai Pi Center - VIP</title>
+    <title>Bonsai Pi Center - Sảnh VIP</title>
     <style>
         :root { --picolor: #5e2d91; --blue: #4c84ff; --dark: #121212; }
         body { font-family: sans-serif; margin: 0; background: var(--dark); color: white; overflow: hidden; }
 
-        /* MÀN HÌNH CHÀO */
+        /* MÀN HÌNH CHÀO (WELCOME) */
         .welcome-screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(to bottom, #1a1a1a, #000); }
-        .logo-main { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--picolor)); }
-        .entry-btn { background: var(--picolor); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(94,45,145,0.5); }
+        .logo-main { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--picolor)); border-radius: 20px; }
+        .entry-btn { background: var(--picolor); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px rgba(94,45,145,0.5); transition: 0.3s; }
+        .entry-btn:active { transform: scale(0.95); }
 
-        /* LỚP PHỦ ĐEN */
+        /* LỚP PHỦ ĐEN KHI HIỆN BẢNG */
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 1000; }
 
-        /* CÁI BẢNG TRƯỢT (BOTTOM SHEET) */
-        .bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-radius: 25px 25px 0 0; transition: 0.4s ease; z-index: 1001; color: #333; padding-bottom: 30px; }
+        /* BẢNG TRƯỢT (BOTTOM SHEET) - CHUẨN MẪU MẦY GỬI */
+        .bottom-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; background: white; border-radius: 25px 25px 0 0; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1001; color: #333; padding-bottom: 30px; }
         .bottom-sheet.active { bottom: 0; }
         
         /* THANH KÉO TRÊN ĐẦU BẢNG */
-        .handle { width: 40px; height: 5px; background: #ddd; border-radius: 10px; margin: 15px auto; cursor: pointer; }
+        .handle { width: 45px; height: 5px; background: #ddd; border-radius: 10px; margin: 12px auto; cursor: pointer; }
         
-        .tab-header { display: flex; justify-content: space-around; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .tab-header div { padding: 10px 20px; cursor: pointer; color: #888; }
-        .tab-header .active-tab { color: var(--blue); border-bottom: 3px solid var(--blue); }
-
-        .form-group { padding: 20px; }
-        .input-box { width: 100%; padding: 15px; margin: 8px 0; border-radius: 25px; border: 1px solid #eee; background: #f9f9f9; box-sizing: border-box; outline: none; }
-        .btn-submit { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 25px; font-weight: bold; font-size: 16px; margin-top: 15px; cursor: pointer; }
-        .btn-google { width: 100%; padding: 12px; background: white; border: 1px solid #ddd; border-radius: 25px; margin-top: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <div class="welcome-screen">
-        <img src="https://minepi.com/wp-content/uploads/2023/11/pi-logo-600.png" class="logo-main">
-        <h1 style="margin: 0;">LUCK 8 - PI</h1>
-        <p style="color: #666; margin-bottom: 40px;">Sảnh game và bonsai đẳng cấp</p>
-        <button class="entry-btn" onclick="openLogin()">Click để đăng nhập / đăng ký</button>
-    </div>
-
-    <div id="overlay" onclick="closeLogin()"></div>
-
-    <div class="bottom-sheet" id="loginSheet">
-        <div class="handle" onclick="closeLogin()"></div>
-        
-        <div class="tab-header">
-            <div class="active-tab" id="tabIn" onclick="toggleTab('in')">Đăng nhập</div>
-            <div id="tabUp" onclick="toggleTab('up')">Đăng ký</div>
-        </div>
-
-        <div class="form-group">
-            <div id="loginForm">
-                <input type="text" class="input-box" placeholder="Tên tài khoản">
-                <input type="password" class="input-box" placeholder="Mật khẩu">
-                <button class="btn-submit" onclick="finishLogin()">Click để đăng nhập</button>
-            </div>
-
-            <div id="registerForm" style="display: none;">
-                <input type="text" class="input-box" placeholder="Nhập 6-15 chữ cái và số">
-                <input type="password" class="input-box" placeholder="Mật khẩu (6-15 ký tự)">
-                <input type="tel" class="input-box" placeholder="Nhập số điện thoại">
-                <button class="btn-submit" onclick="finishLogin()">Click để đăng ký</button>
-            </div>
-
-            <div style="text-align: center; margin: 15px 0; color: #999; font-size: 14px;">Or</div>
-            <button class="btn-google" onclick="finishLogin()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="18" style="margin-right: 10px;"> Đăng nhập Google
-            </button>
-        </div>
-    </div>
-
-    <script>
-        function openLogin() {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('loginSheet').classList.add('active');
-        }
-
-        function closeLogin() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('loginSheet').classList.remove('active');
-        }
-
-        function toggleTab(type) {
-            if(type === 'in') {
-                document.getElementById('loginForm').style.display = 'block';
-                document.getElementById('registerForm').style.display = 'none';
-                document.getElementById('tabIn').classList.add('active-tab');
-                document.getElementById('tabUp').classList.remove('active-tab');
-            } else {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('registerForm').style.display = 'block';
-                document.getElementById('tabIn').classList.remove('active-tab');
-                document.getElementById('tabUp').classList.add('active-tab');
-            }
-        }
-
-        function finishLogin() {
-            alert("Đăng nhập thành công! Đang vào sảnh...");
-            // Lưu trạng thái đăng nhập rồi chuyển sảnh ở đây
-            location.href = "lobby.html"; // Mầy tạo thêm trang lobby.html chứa code sảnh tao gửi lúc nãy nhé
-        }
-    </script>
-</body>
-</html>
-                document.getElementById('userName').innerText = type;
-            }, 300);
-        }
-
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('mainOverlay').classList.toggle('active');
-        }
-
-        function logout() {
-            localStorage.clear();
-            location.reload();
-        }
-    </script>
-</body>
-</html>
-            document.getElementById("mySidebar").classList.toggle("active");
-            document.getElementById("overlay").classList.toggle("active");
-        }
-    </script>
-</body>
-</html>
+        /* TAB ĐĂNG NHẬP / ĐĂNG KÝ */
+        .tab-header { display: flex; justify-content: space-around; font-weight: bold; border-bottom: 1px solid #eee; margin-bottom: 10px; }
+        .tab-header div { padding: 12px 25px; cursor: pointer; color: #888; position: relative; }
+        .tab-header .active-tab { color: var(--blue); }
+        .tab-header .active-tab::after { content: ""; position: absolute; bottom: 0; left: 20%; width: 60%; height: 3px; background: var(--blue); border-radius:
