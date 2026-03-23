@@ -3,72 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ví BONSAIPI99</title>
+    <title>Giao dịch BONSAIPI99</title>
     <style>
-        body { font-family: sans-serif; background: #0a0a0a; color: white; padding: 20px; }
-        .card { background: linear-gradient(135deg, #111, #222); padding: 30px; border-radius: 25px; text-align: center; border: 1px solid #333; margin-bottom: 25px; }
-        .pi { font-size: 35px; font-weight: 900; color: #ffbc00; margin: 10px 0; }
-        .form { background: #151515; padding: 25px; border-radius: 20px; border: 1px solid #222; }
-        .addr-box { background: #000; padding: 12px; border-radius: 10px; color: #ffbc00; font-family: monospace; font-size: 11px; margin: 15px 0; border: 1px dashed #444; word-break: break-all; }
-        input { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #333; background: #050505; color: white; box-sizing: border-box; margin-bottom: 15px; outline: none; }
-        .btn { width: 100%; padding: 18px; background: #5e2d91; color: white; border: none; border-radius: 15px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        body { font-family: sans-serif; background: #0a0a0a; color: white; padding: 20px; margin: 0; }
+        .card { background: #151515; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #333; margin-bottom: 20px; }
+        .pi { font-size: 30px; font-weight: bold; color: #ffbc00; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #333; background: #000; color: white; box-sizing: border-box; outline: none; }
+        .btn { width: 100%; padding: 18px; background: #5e2d91; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .addr-box { background: #222; padding: 10px; border-radius: 8px; color: #ffbc00; font-family: monospace; font-size: 11px; margin-bottom: 15px; word-break: break-all; border: 1px dashed #444; }
     </style>
 </head>
 <body>
-    <a href="lobby.html" style="color:#666; text-decoration:none; display:block; margin-bottom:20px;">← Quay lại Sảnh</a>
+    <div style="margin-bottom:20px;"><a href="lobby.html" style="color:#888; text-decoration:none;">← Quay lại</a></div>
     
     <div class="card">
-        <p style="margin:0; opacity:0.6;">Số dư BONSAIPI99</p>
+        <div style="font-size:12px; opacity:0.6;">SỐ DƯ HIỆN TẠI</div>
         <div class="pi">100.00 Pi</div>
     </div>
 
-    <div class="form">
+    <div class="card" style="text-align:left;">
         <h3 id="title" style="margin-top:0; color:#ffbc00;">GIAO DỊCH</h3>
-        
         <div id="nap-extra" style="display:none;">
-            <p style="font-size:12px; color:#888;">Ví Admin nhận Pi:</p>
+            <p style="font-size:12px; color:#888; margin-bottom:5px;">Ví Admin nhận Pi:</p>
             <div class="addr-box">GDUY7O2N...Q7F2K</div>
         </div>
-        
         <input type="number" id="a" placeholder="Số lượng Pi">
-        <input type="text" id="t" placeholder="Chi tiết giao dịch">
+        <input type="text" id="t" placeholder="Chi tiết">
         <button class="btn" onclick="send()">GỬI YÊU CẦU</button>
     </div>
 
     <script>
-        // Tự động đổi giao diện theo nút bấm ở Sảnh
         const params = new URLSearchParams(window.location.search);
         const type = params.get('type') || 'nap';
 
         if(type === 'nap') {
-            document.getElementById('title').innerText = "LỆNH NẠP PI";
+            document.getElementById('title').innerText = "NẠP PI";
             document.getElementById('nap-extra').style.display = "block";
             document.getElementById('t').placeholder = "Dán mã TXID vào đây";
         } else {
-            document.getElementById('title').innerText = "LỆNH RÚT PI";
-            document.getElementById('t').placeholder = "Nhập ví Pi của mầy để nhận";
-            document.getElementById('nap-extra').style.display = "none";
+            document.getElementById('title').innerText = "RÚT PI";
+            document.getElementById('t').placeholder = "Nhập ví Pi nhận tiền";
         }
 
-        const TK = '8352771211:AAG8A09yhuJqcy5wEXCiMUMkBNsEUOM5v5g';
-        const ID = '7359710522';
-
         async function send() {
-            const amount = document.getElementById('a').value;
-            const detail = document.getElementById('t').value;
+            const amt = document.getElementById('a').value;
+            const det = document.getElementById('t').value;
             const user = localStorage.getItem('user99') || 'Khách';
 
-            if(!amount || !detail) return alert("Điền thiếu rồi mầy!");
+            if(!amt || !det) return alert("Mầy điền thiếu thông tin!");
 
-            const head = type === 'nap' ? "📥 NẠP PI" : "📤 RÚT PI";
-            const msg = `🌳 **BONSAIPI99 - ${head}** 🌳\n👤 Khách: \`${user}\`\n💰 Số lượng: \`${amount}\` Pi\n🔑 Chi tiết: \`${detail}\``;
-            const url = `https://api.telegram.org/bot${TK}/sendMessage?chat_id=${ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
+            const token = '8352771211:AAG8A09yhuJqcy5wEXCiMUMkBNsEUOM5v5g';
+            const chatid = '7359710522';
+            const action = type === 'nap' ? "NẠP PI" : "RÚT PI";
+            
+            const msg = `🔔 **YÊU CẦU ${action}**\n👤 User: \`${user}\`\n💰 Số lượng: \`${amt}\` Pi\n🔑 Chi tiết: \`${det}\``;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
 
             try {
                 await fetch(url);
-                alert("Đã báo Admin! Chờ duyệt nhé.");
+                alert("Đã gửi! Admin sẽ check Telegram.");
                 window.location.href = 'lobby.html';
-            } catch(e) { alert("Lỗi mạng!"); }
+            } catch(e) { alert("Lỗi mạng mầy ơi!"); }
         }
     </script>
 </body>
