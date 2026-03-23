@@ -1,110 +1,101 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sảnh BONSAIPI99</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby - BONSAIPI99</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --picolor: #5e2d91; --gold: #ffbc00; --panel: #161616; }
-        body { font-family: sans-serif; background: #080808; color: white; margin: 0; padding-bottom: 80px; }
-        
-        /* Header */
-        header { display: flex; justify-content: space-between; padding: 15px 20px; background: #111; border-bottom: 1px solid #222; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .user { display: flex; align-items: center; gap: 10px; }
-        .avt { width: 40px; height: 40px; background: var(--picolor); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid #333; }
-        .pi-box { background: rgba(255,188,0,0.1); border: 1px solid var(--gold); padding: 5px 12px; border-radius: 20px; color: var(--gold); font-weight: bold; font-size: 13px; }
-
-        /* Banner */
-        .banner { margin: 15px; padding: 25px; background: linear-gradient(135deg, #1a1a1a, var(--picolor)); border-radius: 20px; border: 1px solid #333; }
-        .banner h2 { margin: 0; color: var(--gold); font-size: 22px; }
-
-        /* MENU TỨ TRỤ: HỒ SƠ, NẠP, RÚT, LỊCH SỬ */
-        .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
-        .act-btn { text-align: center; text-decoration: none; color: #888; font-size: 11px; }
-        .icon { width: 50px; height: 50px; background: var(--panel); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 20px; border: 1px solid #252525; }
-
-        /* Danh sách Game */
-        .title { padding: 10px 20px; font-size: 14px; font-weight: bold; color: #555; text-transform: uppercase; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px; }
-        .card { background: var(--panel); border-radius: 18px; overflow: hidden; border: 1px solid #222; text-align: center; }
-        .card img { width: 100%; height: 110px; object-fit: cover; opacity: 0.8; }
-        .card-info { padding: 12px; }
-        .card-info b { font-size: 13px; display: block; margin-bottom: 5px; }
-        .card-info span { font-size: 11px; color: var(--gold); }
-
-        /* Bottom Nav */
-        .nav { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; border-top: 1px solid #222; padding: 12px 0; z-index: 100; }
-        .nav-a { flex: 1; text-align: center; color: #444; text-decoration: none; font-size: 11px; }
-        .nav-a.active { color: var(--picolor); font-weight: bold; }
-        .nav-a i { font-size: 20px; display: block; margin-bottom: 4px; font-style: normal; }
+        body { background-color: #000; color: #fff; font-family: sans-serif; }
+        .pi-box { background: rgba(255,188,0,0.1); border: 1px solid #ffbc00; padding: 5px 12px; border-radius: 20px; color: #ffbc00; font-weight: bold; font-size: 14px; }
+        .menu-icon { width: 50px; height: 50px; background: #1a1a1a; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; }
+        .card { background: #111; border-radius: 18px; overflow: hidden; border: 1px solid #222; }
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #222; }
     </style>
 </head>
-<body>
-    <header>
-        <div class="user">
-            <div class="avt" id="avt">?</div>
+<body class="pb-20">
+
+    <header class="p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div id="avt" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold">U</div>
             <div>
-                <b id="un" style="font-size: 14px;">User</b><br>
-                <span style="font-size: 10px; color: #555;">ID: BONSAIPI99</span>
+                <p id="un" class="font-bold text-sm">User</p>
+                <p class="text-[10px] text-gray-500">ID: BONSAIPI99</p>
             </div>
         </div>
-        <div class="pi-box" id="pi-balance">0.00 Pi</div>
+        <div id="pi-balance" class="pi-box">0.00 Pi</div>
     </header>
 
-    <div class="banner">
-        <h2>BONSAIPI99 VIP</h2>
-        <p style="font-size: 12px; opacity: 0.7;">Hệ thống giải trí & Mua bán cây kiểng Pi.</p>
-    </div>
-
-            <div class="actions">
-        <a href="#" class="act-btn" onclick="alert('Hồ sơ đang đồng bộ...')">
-            <div class="icon" style="color: #2196F3;">👤</div>Hồ Sơ
-        </a>
-
-        <a href="wallet.html?type=nap" class="act-btn">
-            <div class="icon" style="color: #4CAF50;">📥</div>Nạp Pi
-        </a>
-
-        <a href="wallet.html?type=rut" class="act-btn">
-            <div class="icon" style="color: #F44336;">📤</div>Rút Pi
-        </a>
-
-        <a href="#" class="act-btn" onclick="alert('Lịch sử trống!')">
-            <div class="icon" style="color: #ffbc00;">📋</div>Lịch Sử
-        </a>
-    </div>
-
-
-    <div class="title">Trò chơi nổi bật</div>
-    <div class="grid">
-        <div class="card" onclick="alert('Vòng quay sắp mở!')">
-            <img src="https://via.placeholder.com/150/5e2d91/fff?text=SPIN">
-            <div class="card-info"><b>Vòng Quay Bonsai</b><span>1 Pi / Lượt</span></div>
+    <div class="p-4">
+        <div class="bg-gradient-to-r from-purple-900 to-black p-6 rounded-2xl mb-6">
+            <h2 class="font-bold text-lg">BONSAIPI99 VIP</h2>
+            <p class="text-xs text-gray-400">He thong giai tri & Mua ban cay kieng Pi.</p>
         </div>
-        <div class="card" onclick="alert('Nổ hũ đang bảo trì!')">
-            <img src="https://via.placeholder.com/150/222/fff?text=SLOT">
-            <div class="card-info"><b>Nổ Hũ Cây Xanh</b><span>Jackpot: 500 Pi</span></div>
+
+        <div class="grid grid-cols-4 gap-4 mb-8 text-center text-[10px]">
+            <a href="#"><div class="menu-icon">👤</div>Profile</a>
+            <a href="wallet.html"><div class="menu-icon">💰</div>Deposit</a>
+            <a href="#"><div class="menu-icon">💸</div>Withdraw</a>
+            <a href="#"><div class="menu-icon">📋</div>History</a>
+        </div>
+
+        <p class="text-gray-500 text-xs uppercase mb-4">Featured Games</p>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="card">
+                <div class="h-24 bg-gray-800"></div>
+                <div class="p-3 text-[10px]">
+                    <p class="font-bold">Vong Quay Bonsai</p>
+                    <p class="text-gray-500">1 Pi / Spin</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="h-24 bg-gray-800"></div>
+                <div class="p-3 text-[10px]">
+                    <p class="font-bold">No Hu Cay Xanh</p>
+                    <p class="text-yellow-500 text-[8px]">Jackpot: 500 Pi</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="nav">
-        <a href="lobby.html" class="nav-a active"><i>🏠</i>Sảnh</a>
-        <a href="wallet.html" class="nav-a"><i>💰</i>Ví Pi</a>
-        <a href="#" class="nav-a"><i>🎁</i>Sự Kiện</a>
-        <a href="index.html" class="nav-a"><i>🚪</i>Thoát</a>
-    </div>
+    <nav class="nav-bar">
+        <a href="lobby.html" class="text-purple-500 text-[10px] text-center">🏠<br>Lobby</a>
+        <a href="wallet.html" class="text-gray-500 text-[10px] text-center">💳<br>Wallet</a>
+        <a href="#" class="text-gray-500 text-[10px] text-center">🎁<br>Event</a>
+        <a href="index.html" class="text-gray-500 text-[10px] text-center">🚪<br>Exit</a>
+    </nav>
 
     <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBc4oPPt2AQdn6AW85DRpQSIuMyK1oJDlQ",
-    authDomain: "bonsaipi99.firebaseapp.com",
-    databaseURL: "https://bonsaipi99-default-rtdb.firebaseio.com",
-    projectId: "bonsaipi99",
-    storageBucket: "bonsaipi99.firebasestorage.app",
-    appId: "1:119041490462:web:5635dc57b3eb6b49afb80f"
+        const firebaseConfig = {
+            apiKey: "AIzaSyBc4oPPt2AQdn6AW85DRpQSIuMyK1oJDlQ",
+            authDomain: "bonsaipi99.firebaseapp.com",
+            databaseURL: "https://bonsaipi99-default-rtdb.firebaseio.com",
+            projectId: "bonsaipi99",
+            storageBucket: "bonsaipi99.firebasestorage.app",
+            appId: "1:119041490462:web:5635dc57b3eb6b49afb80f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        onValue(ref(database, 'balance'), (s) => {
+            const d = s.val();
+            const e = document.getElementById('pi-balance');
+            if (e) {
+                const v = (d !== null && (typeof d === 'number' || typeof d === 'string')) ? d : 0;
+                e.innerText = v + ".00 Pi";
+            }
+        });
+
+        const u = localStorage.getItem('userPi') || "Guest";
+        document.getElementById('un').innerText = u;
+        document.getElementById('avt').innerText = u.charAt(0).toUpperCase();
+    </script>
+</body>
+</html>
   };
 
   const app = initializeApp(firebaseConfig);
