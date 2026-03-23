@@ -2,82 +2,86 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chợ Bonsai Pi99 - Sàn Giao Dịch Cộng Đồng</title>
-    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, landscape">
+    <title>Bonsai Pi Center</title>
     <style>
-        :root { --primary: #2e7d32; --gold: #ffa000; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
-        
-        /* Header & Banner */
-        .header { background: var(--primary); color: white; padding: 15px; text-align: center; sticky; top: 0; z-index: 100; }
-        .fee-info { background: #fff3e0; padding: 10px; font-size: 0.9rem; color: #e65100; font-weight: bold; border-bottom: 2px dashed var(--gold); }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #1a1a1a; color: white; overflow-x: hidden; }
+        /* Dòng chữ chạy trên đầu */
+        .announcement { background: rgba(94, 45, 145, 0.8); color: #fff; padding: 5px 0; overflow: hidden; white-space: nowrap; position: fixed; top: 0; width: 100%; z-index: 100; }
+        .announcement marquee { font-weight: bold; }
 
-        /* Form đăng bài (Ẩn lúc đầu) */
-        #postForm { display: none; background: white; margin: 15px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        /* Header & Menu */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 50px 20px 10px; background: #2d2d2d; }
+        .menu-btn { font-size: 30px; cursor: pointer; color: #5e2d91; }
+        .user-info { display: flex; align-items: center; background: #3d3d3d; padding: 5px 15px; border-radius: 20px; border: 1px solid #5e2d91; }
+        .pi-balance { color: #ffbc00; font-weight: bold; margin-left: 10px; }
 
-        /* Danh sách cây rao bán */
-        .feed { padding: 15px; }
-        .post { background: white; border-radius: 15px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .post img { width: 100%; height: 250px; object-fit: cover; }
-        .post-content { padding: 15px; }
-        .post-user { display: flex; align-items: center; margin-bottom: 10px; font-weight: bold; color: #555; }
-        .post-user i { margin-right: 8px; color: var(--primary); }
-        .price-tag { color: var(--gold); font-size: 1.3rem; font-weight: bold; }
+        /* Sảnh Game/Bonsai */
+        .lobby { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; margin-top: 10px; }
+        .item-card { background: #333; border-radius: 15px; overflow: hidden; text-align: center; padding-bottom: 10px; border: 1px solid #444; transition: 0.3s; }
+        .item-card:hover { transform: translateY(-5px); border-color: #5e2d91; }
+        .item-card img { width: 100%; height: 100px; object-fit: cover; }
 
-        /* Nút đăng bài nổi */
-        .btn-post-main { position: fixed; bottom: 20px; right: 20px; background: var(--gold); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; z-index: 999; }
-        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; margin-top: 10px; }
+        /* Nút đăng bài + */
+        .btn-add { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #5e2d91; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; color: white; border: none; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+        /* Sidebar Menu */
+        .sidebar { position: fixed; left: -250px; top: 0; width: 250px; height: 100%; background: #222; transition: 0.5s; z-index: 200; padding-top: 60px; }
+        .sidebar a { display: block; padding: 15px 25px; color: white; text-decoration: none; border-bottom: 1px solid #333; }
+        .sidebar a:hover { background: #5e2d91; }
+
+        /* Âm thanh leng keng (giả lập) */
+        @keyframes coinFly {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="announcement">
+        <marquee>Chào mừng mầy đến với Bonsai Pi Market! Chúc mầy mua may bán đắt. Thông báo: Hệ thống sẽ bảo trì vào 12h đêm nay!</marquee>
+    </div>
+
     <div class="header">
-        <h1>🌿 CHỢ BONSAI PI99</h1>
-        <span>Sàn rao bán cây cảnh lớn nhất hệ Pi</span>
-    </div>
-
-    <div class="fee-info">
-        <marquee>⚠️ PHÍ ĐĂNG BÀI: 0.1 Pi/bài (Duyệt nhanh trong 5 phút) - Phí giao dịch thành công: 2%</marquee>
-    </div>
-
-    <button class="btn-post-main" onclick="toggleForm()"><i class="fas fa-plus"></i></button>
-
-    <div id="postForm">
-        <h3><i class="fas fa-edit"></i> Đăng bán cây của mầy</h3>
-        <input type="text" id="treeName" placeholder="Tên cây (Ví dụ: Sanh Nam Điền...)">
-        <textarea id="desc" placeholder="Mô tả chi tiết tình trạng cây..."></textarea>
-        <input type="number" id="price" placeholder="Giá bán (Pi)">
-        <p style="font-size: 0.8rem; color: gray;">Chọn ảnh/video (Bản demo: Chỉ hiển thị hình mẫu)</p>
-        <input type="file" accept="image/*,video/*">
-        <button class="btn-submit" onclick="payFee()">THANH TOÁN PHÍ & ĐĂNG BÀI (0.1 Pi)</button>
-        <button onclick="toggleForm()" style="background:none; border:none; color:red; width:100%; margin-top:10px;">Đóng</button>
-    </div>
-
-    <div class="feed">
-        <div class="post">
-            <div class="post-content">
-                <div class="post-user"><i class="fas fa-user-circle"></i> Anh Ba Vườn Kiểng</div>
-                <img src="https://images.unsplash.com/photo-1599591037488-dc7169438901?auto=format&fit=crop&w=500" alt="Bonsai">
-                <h3>Mai Chiếu Thủy Dáng Trực</h3>
-                <p>Cây thuần chậu 5 năm, chi dăm dày đặc. Cần tiền cưới vợ cho con nên gả gấp.</p>
-                <div class="price-tag">5.0 Pi</div>
-                <button class="btn-submit" style="background:#ffa000" onclick="alert('Đang liên hệ chủ vườn...')">LIÊN HỆ MUA</button>
-            </div>
+        <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+        <div class="user-info">
+            <img src="https://via.placeholder.com/30" style="border-radius: 50%;">
+            <span id="username">Mầy Bonsai</span>
+            <span class="pi-balance">💰 <span id="balance">100.00</span> Pi</span>
         </div>
     </div>
 
+    <div id="mySidebar" class="sidebar">
+        <a href="#" onclick="showProfile()">👤 Hồ Sơ Tài Khoản</a>
+        <a href="#" onclick="showDeposit()">📥 Nạp Pi (Gói linh hoạt)</a>
+        <a href="#" onclick="showWithdraw()">📤 Rút Pi (Max 5 lần/ngày)</a>
+        <a href="#">🎡 Vòng Quay May Mắn</a>
+        <a href="#">🎧 Hỗ Trợ CSKH</a>
+        <a href="#" style="color: red;">🚪 Đăng Xuất</a>
+    </div>
+
+    <div class="lobby">
+        <div class="item-card"><img src="https://via.placeholder.com/150"> <p>Bonsai Tùng La Hán</p> <span>10 Pi</span></div>
+        <div class="item-card"><img src="https://via.placeholder.com/150"> <p>Mai Vàng Cực Phẩm</p> <span>5 Pi</span></div>
+        <div class="item-card"><img src="https://via.placeholder.com/150"> <p>Sanh Nam Điền</p> <span>50 Pi</span></div>
+    </div>
+
+    <button class="btn-add">+</button>
+
     <script>
-        function toggleForm() {
-            var f = document.getElementById('postForm');
-            f.style.display = (f.style.display == 'none' || f.style.display == '') ? 'block' : 'none';
+        function toggleSidebar() {
+            var sidebar = document.getElementById("mySidebar");
+            if (sidebar.style.left === "0px") { sidebar.style.left = "-250px"; } 
+            else { sidebar.style.left = "0px"; }
         }
 
-        function payFee() {
-            alert('Hệ thống sẽ kết nối ví Pi của mầy để thu phí 0.1 Pi đăng bài. Đồng ý không?');
-            // Chỗ này sau này sẽ dán code Pi Payment thật vào nè
+        // Giả lập âm thanh leng keng khi cộng tiền
+        function addPi(amount) {
+            let balance = document.getElementById('balance');
+            balance.innerText = (parseFloat(balance.innerText) + amount).toFixed(2);
+            // Ở đây mầy thêm file audio keng.mp3 vào nhé
+            alert("Keng! Mầy vừa được cộng " + amount + " Pi");
         }
     </script>
 </body>
