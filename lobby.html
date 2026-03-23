@@ -5,46 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sảnh Bonsai Pi</title>
     <style>
-        :root { --picolor: #5e2d91; --dark: #121212; --gold: #ffbc00; }
-        body { font-family: sans-serif; margin: 0; background: var(--dark); color: white; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #1a1a1a; border-bottom: 1px solid #333; }
-        .lobby { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .card { background: #1e1e1e; border-radius: 15px; padding-bottom: 10px; text-align: center; border: 1px solid #333; }
-        .card img { width: 100%; border-radius: 15px 15px 0 0; height: 120px; object-fit: cover; }
-        /* Menu 3 gạch */
-        .sidebar { position: fixed; left: -260px; top: 0; width: 250px; height: 100%; background: #000; transition: 0.3s; z-index: 1000; border-right: 1px solid var(--picolor); }
-        .sidebar.active { left: 0; }
-        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 900; }
-        .overlay.active { display: block; }
-        .menu-item { display: block; padding: 15px 20px; color: white; text-decoration: none; border-bottom: 1px solid #222; }
+        body { font-family: sans-serif; margin: 0; background: #121212; color: white; }
+        .header { display: flex; justify-content: space-between; padding: 15px; background: #1a1a1a; border-bottom: 1px solid #333; align-items: center; }
+        .balance { color: #ffbc00; border: 1px solid #ffbc00; padding: 5px 15px; border-radius: 20px; font-weight: bold; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+        .card { background: #1e1e1e; border-radius: 15px; text-align: center; padding-bottom: 10px; overflow: hidden; border: 1px solid #333; }
+        .card img { width: 100%; height: 100px; object-fit: cover; }
+        .menu { position: fixed; bottom: 0; width: 100%; display: flex; background: #1a1a1a; padding: 10px 0; border-top: 1px solid #333; }
+        .menu a { flex: 1; text-align: center; color: white; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div style="font-size: 25px; cursor: pointer;" onclick="toggleMenu()">☰</div>
-        <div style="color: var(--gold); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px;">100.00 Pi</div>
+        <b style="color: #5e2d91;">BONSAI PI</b>
+        <div class="balance">100.00 Pi</div>
     </div>
 
-    <div class="lobby">
-        <div class="card"><img src="https://via.placeholder.com/150/222/fff?text=Bonsai+1"><p>Tùng La Hán</p><b>10 Pi</b></div>
-        <div class="card"><img src="https://via.placeholder.com/150/222/fff?text=Bonsai+2"><p>Mai Vàng</p><b>5 Pi</b></div>
+    <div class="grid">
+        <div class="card" onclick="alert('Sắp ra mắt mầy ơi!')"><img src="https://via.placeholder.com/150/5e2d91/fff?text=Vong+Quay"><p>Vòng Quay</p></div>
+        <div class="card" onclick="alert('Cây đang lớn, đợi tí!')"><img src="https://via.placeholder.com/150/222/fff?text=Bonsai"><p>Chợ Cây</p></div>
     </div>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-    <div class="sidebar" id="sidebar">
-        <div style="padding: 20px; text-align: center; border-bottom: 1px solid #333;"><b>BONSAI PI VIP</b></div>
-        <a href="#" class="menu-item">👤 Tài khoản</a>
-        <a href="#" class="menu-item">🎡 Vòng quay may mắn</a>
-        <a href="#" class="menu-item">📥 Nạp Pi</a>
-        <a href="index.html" class="menu-item" style="color: #ff4444;">🚪 Đăng xuất</a>
+    <div class="menu">
+        <a href="lobby.html">🏠 Sảnh</a>
+        <a href="wallet.html">💰 Nạp/Rút</a>
+        <a href="index.html">🚪 Thoát</a>
     </div>
-
-    <script>
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-    </script>
 </body>
 </html>
-
