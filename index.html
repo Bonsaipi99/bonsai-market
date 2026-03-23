@@ -61,20 +61,21 @@
         document.getElementById('loginSheet').classList.toggle('active', show);
     }
 
-    window.startApp = async function() {
+        window.startApp = function() {
         const val = document.getElementById('piName').value;
-        if(!val) return alert("Mầy chưa nhập tên!");
-        
-        // Lưu vào Firebase để làm "kho chứa" thật
-        await set(ref(db, 'users/' + val), {
-            username: val,
-            lastLogin: new Date().toISOString(),
-            balance: 100 // Tặng 100 Pi ảo lúc mới tạo chẳng hạn
-        });
+        if(!val) {
+            alert("Mầy chưa nhập tên!");
+            return;
+        }
 
+        // Lưu tạm vào máy để dùng ở trang sảnh
         localStorage.setItem('user99', val);
+
+        // Chuyển trang ngay lập tức để vào sảnh test nạp rút
+        console.log("Đang vào sảnh...");
         window.location.href = 'lobby.html';
-    }
+    };
+
 
     // Khởi tạo Pi SDK
     Pi.init({ version: "2.0", sandbox: true });
