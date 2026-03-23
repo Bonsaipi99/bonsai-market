@@ -13,24 +13,24 @@
 </head>
 <body>
     <header class="p-4 flex justify-between items-center border-b border-[#1a1a1a]">
-        <div class="font-bold text-purple-500">BONSAIPI99</div>
+        <div class="font-bold text-purple-500 uppercase text-xs">BONSAIPI99</div>
         <div id="pi-balance" class="pi-box">0.00 Pi</div>
     </header>
 
-    <div class="p-4">
-        <div class="card mb-6 text-center">
-            <h2 class="text-xl font-bold mb-2">WELCOME</h2>
-            <p class="text-gray-500 text-xs">Manage your Pi balance easily.</p>
+    <div class="p-4 text-center">
+        <div class="mb-8">
+            <h2 class="text-xl font-bold">WELCOME</h2>
+            <p class="text-gray-500 text-[10px]">Manage your Pi balance easily.</p>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <a href="wallet.html" class="card text-center">
-                <div class="text-2xl mb-2">💰</div>
-                <div class="text-xs font-bold uppercase">Deposit</div>
+            <a href="wallet.html" class="card">
+                <div class="text-2xl mb-1">💰</div>
+                <div class="text-[10px] font-bold uppercase">Deposit</div>
             </a>
-            <div class="card text-center opacity-50">
-                <div class="text-2xl mb-2">💸</div>
-                <div class="text-xs font-bold uppercase">Withdraw</div>
+            <div class="card opacity-50">
+                <div class="text-2xl mb-1">💸</div>
+                <div class="text-[10px] font-bold uppercase">Withdraw</div>
             </div>
         </div>
     </div>
@@ -51,20 +51,15 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        onValue(ref(database, 'balance'), (s) => {
-            const d = s.val();
-            const e = document.getElementById('pi-balance');
-            if (e) {
-                const v = (d !== null && (typeof d === 'number' || typeof d === 'string')) ? d : 0;
-                e.innerText = v + ".00 Pi";
+        onValue(ref(database, 'balance'), (snapshot) => {
+            const data = snapshot.val();
+            const el = document.getElementById('pi-balance');
+            if (el) {
+                // Sửa lỗi hiện [object Object]
+                const val = (data && typeof data === 'object') ? (data.balance || 0) : (data || 0);
+                el.innerText = parseFloat(val).toFixed(2) + " Pi";
             }
         });
     </script>
 </body>
 </html>
-    const displayElement = document.getElementById('pi-balance');
-    if (displayElement) {
-      displayElement.innerText = (data ? data : "0") + ".00 Pi";
-    }
-  });
-</script>
