@@ -9,7 +9,7 @@
         body { background-color: #000; color: #fff; font-family: sans-serif; }
         .pi-box { background: rgba(255,188,0,0.1); border: 1px solid #ffbc00; padding: 15px; border-radius: 12px; text-align: center; color: #ffbc00; font-weight: bold; font-size: 20px; }
         .input-field { background: #111; border: 1px solid #222; border-radius: 8px; padding: 12px; width: 100%; margin-bottom: 15px; color: #fff; outline: none; }
-        .btn-pay { background: #6d28d9; color: #fff; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; }
+        .btn-pay { background: #6d28d9; color: #fff; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body class="p-4">
@@ -45,7 +45,7 @@
             const d = s.val();
             const e = document.getElementById('pi-balance');
             if (e) {
-                const v = (d !== null && (typeof d === 'number' || typeof d === 'string')) ? d : 0;
+                const v = (d !== null && (typeof d === 'object' ? d.balance : d)) || 0;
                 e.innerText = v + ".00 Pi";
             }
         });
@@ -53,26 +53,29 @@
         document.getElementById('btn-send').onclick = async function() {
             const a = document.getElementById('amount').value;
             const t = document.getElementById('txid').value;
-            const token = "7547194689:AAH-6mJ-971EwS0pYVf8m9qR7t_Xv6U9u9I";
+            
+            // THAY TOKEN CHUẨN CỦA MẦY VÀO ĐÂY
+            const token = "7547194689:AAH-6mJ-971EwS0pYVf8m9qR7t_Xv6U9u9I"; 
             const chatid = "6198947087";
 
-            if (!a || !t) {
-                alert("Fill all fields!");
-                return;
-            }
+            if (!a || !t) { alert("Fill all fields!"); return; }
 
-            const msg = `🔔 NEW DEPOSIT\nAmount: ${a} Pi\nTXID: ${t}`;
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatid}&text=${encodeURIComponent(msg)}`;
+            const msg = "🔔 NEW DEPOSIT\nAmount: " + a + " Pi\nTXID: " + t;
+            const url = "https://api.telegram.org/bot" + token + "/sendMessage";
 
             try {
-                const r = await fetch(url);
+                const r = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatid, text: msg })
+                });
                 const res = await r.json();
                 if(res.ok) {
-                    alert("Success!");
+                    alert("Success! Check Telegram.");
                     document.getElementById('amount').value = "";
                     document.getElementById('txid').value = "";
                 } else {
-                    alert("Tele Error: " + res.description);
+                    alert("Lỗi: " + res.description);
                 }
             } catch (err) {
                 alert("Network Error!");
